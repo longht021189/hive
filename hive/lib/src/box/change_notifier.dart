@@ -4,33 +4,44 @@ import 'package:hive/hive.dart';
 import 'package:hive/src/binary/frame.dart';
 import 'package:meta/meta.dart';
 
-/// Not part of public API
-class ChangeNotifier {
-  final StreamController<BoxEvent> _streamController;
+part 'change_notifier.base.dart';
 
+/// Not part of public API
+abstract class ChangeNotifier {
   /// Not part of public API
-  ChangeNotifier() : _streamController = StreamController<BoxEvent>.broadcast();
+  factory ChangeNotifier() => _factory.create();
 
   /// Not part of public API
   @visibleForTesting
-  ChangeNotifier.debug(this._streamController);
+  factory ChangeNotifier.debug(
+    StreamController<BoxEvent> controller
+  ) => _factory.debug(controller);
 
   /// Not part of public API
-  void notify(Frame frame) {
-    _streamController.add(BoxEvent(frame.key, frame.value, frame.deleted));
-  }
+  void notify(Frame frame);
 
   /// Not part of public API
-  Stream<BoxEvent> watch({dynamic key}) {
-    if (key != null) {
-      return _streamController.stream.where((it) => it.key == key);
-    } else {
-      return _streamController.stream;
+  Stream<BoxEvent> watch({dynamic key});
+
+  /// Not part of public API
+  Future<void> close();
+
+  /// Not part of public API
+  static ChangeNotifierFactory _factory = _DefaultFactory();
+
+  /// Not part of public API
+  static void updateFactory(ChangeNotifierFactory factory) {
+    if (factory != null) {
+      _factory = factory;
     }
   }
+}
+
+/// Not part of public API
+abstract class ChangeNotifierFactory {
+  /// Not part of public API
+  ChangeNotifier create();
 
   /// Not part of public API
-  Future<void> close() {
-    return _streamController.close();
-  }
+  ChangeNotifier debug(StreamController<BoxEvent> controller);
 }

@@ -9,10 +9,7 @@ environment:
 
 dependencies:
   hive:
-    git:
-      url: git@github.com:longht021189/hive.git
-      ref: develop
-      path: hive
+    path: ../hive
 
   build: ^1.1.6
   source_gen: ^0.9.4+4

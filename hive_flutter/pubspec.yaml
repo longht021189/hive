@@ -12,13 +12,10 @@ dependencies:
     sdk: flutter
 
   hive:
-    git:
-      url: git@github.com:longht021189/hive.git
-      ref: develop
-      path: hive
+    path: ../hive
 
   path_provider: ">=1.0.0 <2.0.0"
-  path: ">=1.6.0 <1.7.0"
+  path: ^1.6.4
 
 dev_dependencies:
   flutter_test:
